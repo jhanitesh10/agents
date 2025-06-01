@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>ADK Streaming Client</title>
+  </head>
+  <body>
+    <h2>Ask Your Agent</h2>
+    <textarea id="input" rows="4" cols="50">2 and 2 do subtraction</textarea
+    ><br />
+    <button onclick="send()">Send</button>
+    <pre id="output"></pre>
+
+    <script>
+      async function send() {
+        const input = document.getElementById("input").value;
+        const output = document.getElementById("output");
+        output.textContent = "Waiting for response...\n\n";
+        // npx ngrok http 8000
+        // replace url with ngrok url
+        // https://cors-anywhere.herokuapp.com/corsdemo
+        const response = await fetch(
+          "https://cors-anywhere.herokuapp.com/https://8aef-2405-201-29-80d2-c830-91de-1dbe-d233.ngrok-free.app/run",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "x-requested-with": "cors-anywhere",
+            },
+            body: JSON.stringify({
+              app_name: "calculator_agent",
+              user_id: "user_jhanitesh10",
+              session_id: "session_jhanitesh10",
+              streaming: true,
+              new_message: {
+                role: "user",
+                parts: [{ text: input }],
+              },
+            }),
+          }
+        );
+
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder("utf-8");
+        output.textContent = "";
+
+        while (true) {
+          const { value, done } = await reader.read();
+          if (done) break;
+          const chunk = decoder.decode(value);
+          output.textContent += chunk;
+        }
+      }
+    </script>
+  </body>
+</html>
