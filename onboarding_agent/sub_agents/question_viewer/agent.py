@@ -17,7 +17,7 @@ def get_questions_with_view(ticker: str) -> dict:
                 {"id": '2', "name": 'narvar', "type": 'customer', 'ownerId': '2', 'owner': 'Amit Dugar', 'cs_owner_c': 'Amit Dugar'},
                 {"id": '3', "name": 'litera', "type": 'customer', 'ownerId': '3', 'owner': 'Amit Dugar', 'cs_owner_c': 'Amit Dugar'},
              ],
-            "confirmation": [{'text': ""}],
+            "confirmation": [{'text': "Account type is customer", 'value': "account.customerType", 'prompt': 'Account type is customer'}],
         }]
 
     except Exception as e:
