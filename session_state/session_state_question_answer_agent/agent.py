@@ -7,7 +7,6 @@ session_state_question_answer_agent = Agent(
     description="Question answering agent",
     instruction="""
     You are a helpful assistant that answers questions about the user's preferences.
-
     Here is some information about the user:
     Name:
     {user_name}
