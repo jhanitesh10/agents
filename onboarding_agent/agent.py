@@ -15,11 +15,10 @@ root_agent = Agent(
     to determine which agent to delegate to.
 
     You are responsible for delegating tasks to the following agent:
-    On first time or default call question_viewer agent to get the question with data preview and query suggestion.
+    1: On first time or default call question_viewer agent to get the question with data preview and query suggestion.
     - question_viewer: get the question with data preview and query suggestion.
-    On confirmation or sugggestion we need to call query builder to update the suggestion or build and get data from confirmation or suggestion all query related data.
-    - query_builder_with_data
-
+    2: On confirmation or sugggestion or update request , we need to call query builder to update the suggestion or build and get data from confirmation or suggestion all query related data.
+    - query_builder_with_data: create query to perform crud operation and perform action.
     """,
     sub_agents=[question_viewer, query_builder_with_data],
     tools=[],
