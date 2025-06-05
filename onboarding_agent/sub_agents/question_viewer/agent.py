@@ -1,5 +1,13 @@
 from google.adk.agents import Agent
-
+# SELECT Id, Name, Industry, BillingCity, BillingState
+# FROM Account
+# WHERE Id IN (
+#     SELECT AccountId
+#     FROM Opportunity
+#     WHERE
+#         StageName = 'Closed Won' AND
+#         CloseDate = LAST_N_DAYS:365
+# )
 
 def get_questions_with_view() -> dict:
     """Retrieves current question with data preview and query suggestion."""
@@ -15,6 +23,7 @@ def get_questions_with_view() -> dict:
                 "query": "SELECT Id, Name, AccountNumber, Type, Industry, BillingCity, BillingState, Phone, Website FROM Account WHERE Type = 'Customer'",
                 "expression": "Account.Type = 'Customer'"
             },
+
             "data": [
                 {
                     "Id": "0011X000003ABCDQ1",
