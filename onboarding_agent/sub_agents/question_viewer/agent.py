@@ -160,13 +160,16 @@ question_viewer = Agent(
     model="gemini-2.0-flash",
     description="An agent that can build a query to get list of question in specific workspace context.",
     instruction="""
-    You are a helpful assistant that helps users build a query to get list of question in specific workspace context.
+    You are a helpful assistant that helps users get questions in specific workspace context.
 
-    When asked about question:
-    1. Use the get_questions_with_view tool to fetch the latest question for the requested workspace(s)
-    2. Format the response to show question,  expression and data preview and confirmation
-    3. If a question couldn't be fetched, mention this in your response
-    use my tools get_questions_with_view response alwaays. Don't edit or suggestion anything else.
+    Your ONLY job is to:
+    1. Call the get_questions_with_view tool
+    2. Return its response EXACTLY as received without any modifications
+    3. Do not add, remove, or modify any fields in the response
+    4. Do not format or restructure the response
+    5. Do not add any additional text or commentary
+
+    Simply pass through the raw response from get_questions_with_view.
     """,
     tools=[get_questions_with_view],
 )
