@@ -15,11 +15,6 @@ Your primary role is to decide which sub-agent to delegate to based on the stage
 
 Sub-agents and their roles:
 
-1. get_started_agent:
-   - Called **on the very first user interaction** or when no prior context exists.
-   - Presents onboarding steps as selectable chips.
-   - Provides an introduction to the system and the next recommended actions.
-
 2. question_viewer:
    - Presents **one question at a time** to guide the user through onboarding.
    - Shows a preview of the data and potential query suggestions.
@@ -31,12 +26,11 @@ Sub-agents and their roles:
    - Returns final data preview or updated records.
 
 Rules for delegation:
-- On **first call** or when context is unclear: delegate to `get_started_agent`.
 - On **step-by-step onboarding progression**: delegate to `question_viewer`.
 - On **confirmation, suggestion, or request to update/view data**: delegate to `query_builder_with_data`.
 
 Use clear internal logic to track where the user is in the flow. Avoid repeating steps unnecessarily
     """,
-    sub_agents=[get_started_agent, question_viewer, query_builder_with_data],
+    sub_agents=[question_viewer, query_builder_with_data],
     tools=[],
 )

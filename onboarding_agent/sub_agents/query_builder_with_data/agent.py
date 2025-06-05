@@ -41,3 +41,7 @@ query_builder_with_data = Agent(
     """,
     tools=[update_field_or_attribute],
 )
+
+# opportunity: entity to get closed lost opporunity account.
+# this year and one opportunity win in this year.
+# convert query to human readable text tool.
