@@ -5,6 +5,8 @@ from google.adk.runners import Runner
 from google.adk.sessions import DatabaseSessionService
 from persistent_memory_agent.agent import persistent_memory_agent
 from utils import call_agent_async
+from google.adk.runners import RunConfig
+from google.adk.agents.run_config import StreamingMode
 
 load_dotenv()
 
@@ -56,6 +58,9 @@ async def main_async():
         app_name=APP_NAME,
         session_service=session_service,
     )
+    run_config=RunConfig(streaming_mode=StreamingMode.SSE)  # Enable streaming for the agent
+
+    runner.run(run_config);
 
     # ===== PART 5: Interactive Conversation Loop =====
     print("\nWelcome to Boomerang reminder Chat!")

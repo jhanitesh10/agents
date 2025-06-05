@@ -1,11 +1,12 @@
 from google.adk.agents import Agent
 from google.adk.tools.tool_context import ToolContext
+from google.adk.runners import RunConfig
 
 
 def update_field_or_attribute(topic: str, tool_context: ToolContext) -> dict:
     """Get a nerdy joke about a specific topic."""
-    print(f"--- Tool: update_field_or_attribute called for topic: {topic} {tool_context}---")
-
+    print(f"--- Tool: update_field_or_attribute called for topic: {topic} ---")
+    print(f"Tool Context Stream: {tool_context.run_config.stream}")
 
     return {"status": "success", "query": 'select * from account where accountType = "customer"', "topic": topic}
 
@@ -40,4 +41,5 @@ query_builder_with_data = Agent(
 
     """,
     tools=[update_field_or_attribute],
+    run_config=RunConfig(stream=True)  # Enable streaming for the agent
 )

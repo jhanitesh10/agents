@@ -11,7 +11,7 @@ def get_questions_with_view(ticker: str) -> dict:
         return [{
             "status": "success",
             "question": "how do you identify customer account?",
-            "expression": "select * from account where accountType = 'customer'",
+            "expression": "select * from account where (accountType | type) = 'customer'",
             "dataPreview": [
                 {"id": '1', "name": 'wework', "type": 'prospect', 'ownerId': '1', 'owner': 'Amit Dugar', 'cs_owner_c': 'Amit Dugar'},
                 {"id": '2', "name": 'narvar', "type": 'customer', 'ownerId': '2', 'owner': 'Amit Dugar', 'cs_owner_c': 'Amit Dugar'},
