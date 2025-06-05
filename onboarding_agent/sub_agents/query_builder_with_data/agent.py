@@ -1,6 +1,5 @@
 from google.adk.agents import Agent
 from google.adk.tools.tool_context import ToolContext
-from google.adk.runners import RunConfig
 
 
 def update_field_or_attribute(topic: str, tool_context: ToolContext) -> dict:
@@ -41,5 +40,4 @@ query_builder_with_data = Agent(
 
     """,
     tools=[update_field_or_attribute],
-    run_config=RunConfig(stream=True)  # Enable streaming for the agent
 )
