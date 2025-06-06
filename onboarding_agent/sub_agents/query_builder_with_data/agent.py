@@ -246,7 +246,7 @@ You support all types of SQL operations, including:
 }
 ### Instructions
 
-1. Always generate **pure MySQL**, no explanations or comments.
+1. Always generate return response from buildquery tool.
 2. Choose the correct **table and fields** based on the user's intent.
 3. If user references both entities (e.g., "customer with closed deals"), perform a proper `JOIN`.
 4. Use clear table aliases (`a` for `Account`, `o` for `Opportunity`) in joins.
@@ -255,12 +255,7 @@ You support all types of SQL operations, including:
 7. If user asks for updates or inserts, make sure to generate a valid `UPDATE` or `INSERT` query.
 8. Use quotes for string values (e.g., `'Closed Won'`).
 
-pass generated query to buildquery tool. make sure you are using buildquery to return the data. It should be in the same format as the data in the tool.
-return a json response in buildquery tool format.
-    return {"status": "success", "query": query, "data": getDataFromQuery(query, tool_context)["data"],             "expression": {
-                "query": query,
-                "expression": ""
-            },}
+    Simply pass through the raw response from get_questions_with_view.
     """,
     tools=[buildquery],
 )
