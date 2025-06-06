@@ -133,7 +133,6 @@ def getDataFromQuery(query: str, tool_context: ToolContext) -> dict:
     return {"status": "success", "data": data}
 
 def buildquery(query: str, tool_context: ToolContext) -> dict:
-    """geq data for specific  query."""
     print(f"--- Tool: buildquery called for query: {query} ---")
     print(f"Tool Context Stream: {tool_context}")
 
@@ -257,6 +256,11 @@ You support all types of SQL operations, including:
 8. Use quotes for string values (e.g., `'Closed Won'`).
 
 pass generated query to buildquery tool. make sure you are using buildquery to return the data. It should be in the same format as the data in the tool.
+return a json response in buildquery tool format.
+    return {"status": "success", "query": query, "data": getDataFromQuery(query, tool_context)["data"],             "expression": {
+                "query": query,
+                "expression": ""
+            },}
     """,
     tools=[buildquery],
 )
