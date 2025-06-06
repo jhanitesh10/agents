@@ -1,20 +1,153 @@
 from google.adk.agents import Agent
 from google.adk.tools.tool_context import ToolContext
+import random
 
 
-def buildquery(topic: str, tool_context: ToolContext) -> dict:
-    """Get a nerdy joke about a specific topic."""
-    print(f"--- Tool: buildquery called for topic: {topic} ---")
-    print(f"Tool Context Stream: {tool_context.run_config.stream}")
+def get_random_records(data: list, count: int) -> list:
+    """Randomly select a specified number of records from the data."""
+    if count > len(data):
+        return data
+    return random.sample(data, count)
 
-    return {"status": "success", "query": 'select * from account where accountType = "customer"', "topic": topic}
+def getDataFromQuery(query: str, tool_context: ToolContext) -> dict:
+    """get data for specific query."""
+    print(f"--- Tool: getDataFromQuery called for query: {query} ---")
+    print(f"Tool Context Stream: {tool_context}")
+    data = [                {
+                    "Id": "0011X000003ABCDQ1",
+                    "Name": "Acme Corporation",
+                    "AccountNumber": "ACM-001",
+                    "Type": "Customer",
+                    "Industry": "Manufacturing",
+                    "BillingCity": "Chicago",
+                    "BillingState": "IL",
+                    "Phone": "(312) 555-0142",
+                    "Website": "https://www.acmecorp.com"
+                },
+                {
+                    "Id": "0011X000003EFGHQ2",
+                    "Name": "BrightTech Solutions",
+                    "AccountNumber": "BTS-002",
+                    "Type": "Customer",
+                    "Industry": "Technology",
+                    "BillingCity": "San Francisco",
+                    "BillingState": "CA",
+                    "Phone": "(415) 555-0199",
+                    "Website": "https://www.brighttech.io"
+                },
+                {
+                    "Id": "0011X000003IJKLQ3",
+                    "Name": "GreenFields Inc.",
+                    "AccountNumber": "GFI-003",
+                    "Type": "Customer",
+                    "Industry": "Agriculture",
+                    "BillingCity": "Des Moines",
+                    "BillingState": "IA",
+                    "Phone": "(515) 555-0173",
+                    "Website": "https://www.greenfieldsag.com"
+                },
+                {
+                    "Id": "0011X000003MNOPQ4",
+                    "Name": "UrbanEdge Realty",
+                    "AccountNumber": "UER-004",
+                    "Type": "Customer",
+                    "Industry": "Real Estate",
+                    "BillingCity": "Austin",
+                    "BillingState": "TX",
+                    "Phone": "(512) 555-0128",
+                    "Website": "https://www.urbanedge.com"
+                },
+                {
+                    "Id": "0011X000003QRSTQ5",
+                    "Name": "MedCare Partners",
+                    "AccountNumber": "MCP-005",
+                    "Type": "Customer",
+                    "Industry": "Healthcare",
+                    "BillingCity": "Boston",
+                    "BillingState": "MA",
+                    "Phone": "(617) 555-0139",
+                    "Website": "https://www.medcarepartners.org"
+                },
+                {
+                    "Id": "0011X000003UVWXQ6",
+                    "Name": "Nimbus Financial",
+                    "AccountNumber": "NBF-006",
+                    "Type": "Customer",
+                    "Industry": "Finance",
+                    "BillingCity": "New York",
+                    "BillingState": "NY",
+                    "Phone": "(212) 555-0183",
+                    "Website": "https://www.nimbusfinance.com"
+                },
+                {
+                    "Id": "0011X000003YZABQ7",
+                    "Name": "Sunset Hospitality",
+                    "AccountNumber": "SHO-007",
+                    "Type": "Customer",
+                    "Industry": "Hospitality",
+                    "BillingCity": "Miami",
+                    "BillingState": "FL",
+                    "Phone": "(305) 555-0111",
+                    "Website": "https://www.sunsethospitality.com"
+                },
+                {
+                    "Id": "0011X000003CDEFQ8",
+                    "Name": "Orion Retail Group",
+                    "AccountNumber": "ORG-008",
+                    "Type": "Customer",
+                    "Industry": "Retail",
+                    "BillingCity": "Seattle",
+                    "BillingState": "WA",
+                    "Phone": "(206) 555-0164",
+                    "Website": "https://www.orionretail.com"
+                },
+                {
+                    "Id": "0011X000003GHIJQ9",
+                    "Name": "Peak Performance Gear",
+                    "AccountNumber": "PPG-009",
+                    "Type": "Customer",
+                    "Industry": "Sports",
+                    "BillingCity": "Denver",
+                    "BillingState": "CO",
+                    "Phone": "(720) 555-0192",
+                    "Website": "https://www.peakgear.com"
+                },
+                {
+                    "Id": "0011X000003KLMNQ0",
+                    "Name": "TerraEnergy Solutions",
+                    "AccountNumber": "TES-010",
+                    "Type": "Customer",
+                    "Industry": "Energy",
+                    "BillingCity": "Houston",
+                    "BillingState": "TX",
+                    "Phone": "(713) 555-0155",
+                    "Website": "https://www.terraenergy.com"
+                }
+]
+
+    # If the query contains "random" or similar keywords, return random records
+    if "random" in query.lower():
+        count = 5  # Default to 5 records
+        return {"status": "success", "data": get_random_records(data, count)}
+
+    return {"status": "success", "data": data}
+
+def buildquery(query: str, tool_context: ToolContext) -> dict:
+    """geq data for specific  query."""
+    print(f"--- Tool: buildquery called for query: {query} ---")
+    print(f"Tool Context Stream: {tool_context}")
+
+    return {"status": "success", "query": query, "data": getDataFromQuery(query, tool_context)["data"],             "expression": {
+                "query": query,
+                "expression": ""
+            },}
 
 
 # Create the funny nerd agent
 query_builder_with_data = Agent(
     name="query_builder_with_data",
     model="gemini-2.0-flash",
-    description="An agent that tells nerdy jokes about various topics.",
+    description="An agent that build query to get data.",
     instruction="""
 You are a MySQL query builder agent.
 
@@ -123,7 +256,7 @@ You support all types of SQL operations, including:
 7. If user asks for updates or inserts, make sure to generate a valid `UPDATE` or `INSERT` query.
 8. Use quotes for string values (e.g., `'Closed Won'`).
 
-
+pass generated query to buildquery tool. make sure you are using buildquery to return the data. It should be in the same format as the data in the tool.
     """,
     tools=[buildquery],
 )

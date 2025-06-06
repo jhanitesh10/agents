@@ -178,6 +178,7 @@ question_viewer = Agent(
     4. Do not format or restructure the response
     5. Do not add any additional text or commentary
 
+    after calling get_questions_with_view, you have to call query_builder_with_data tool to get data.
     Simply pass through the raw response from get_questions_with_view.
     """,
     tools=[get_questions_with_view],
