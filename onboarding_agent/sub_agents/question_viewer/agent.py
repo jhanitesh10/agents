@@ -169,7 +169,7 @@ question_viewer = Agent(
     model="gemini-2.0-flash",
     description="An agent that can build a query to get list of question in specific workspace context.",
     instruction="""
-    You are a helpful assistant that helps users get questions in specific workspace context.
+    You are a helpful assistant that helps users get questions in specific workspace context. You have to call get_questions_with_view tool to get questions.
 
     Your ONLY job is to:
     1. Call the get_questions_with_view tool
@@ -178,7 +178,6 @@ question_viewer = Agent(
     4. Do not format or restructure the response
     5. Do not add any additional text or commentary
 
-    after calling get_questions_with_view, you have to call query_builder_with_data tool to get data.
     Simply pass through the raw response from get_questions_with_view.
     """,
     tools=[get_questions_with_view],

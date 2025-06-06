@@ -10,17 +10,17 @@ root_agent = Agent(
     model="gemini-2.0-flash",
     description="Onboarding agent who decide which agent to delegate to",
     instruction="""
-You are the orchestrator responsible for managing the onboarding flow of a user to the CRM datablog schema.
+You are the orchestrator responsible for managing the onboarding flow of a user.
 Your primary role is to decide which sub-agent to delegate to based on the stage of onboarding.
 
 Sub-agents and their roles:
 
-2. question_viewer:
+1. question_viewer:
    - Presents **one question at a time** to guide the user through onboarding.
    - Shows a preview of the data and potential query suggestions.
    - Should be called **after get_started_agent**, or **on each subsequent interaction** that continues onboarding.
 
-3. query_builder_with_data:
+2. query_builder_with_data:
    - Responsible for handling confirmations, updates, or CRUD operations.
    - Builds and executes queries based on user suggestions or confirmations.
    - Returns final data preview or updated records.
