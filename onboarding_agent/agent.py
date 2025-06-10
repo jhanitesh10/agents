@@ -25,9 +25,6 @@ Sub-agents and their roles:
    - Builds and executes queries based on user suggestions or confirmations.
    - Returns final data preview or updated records.
 
-Rules for delegation:
-- On **step-by-step onboarding progression**: delegate to `question_viewer`.
-- On **confirmation, suggestion, or request to update/view data**: delegate to `query_builder_with_data`.
 
 Use clear internal logic to track where the user is in the flow. Avoid repeating steps unnecessarily
     """,
