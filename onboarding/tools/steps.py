@@ -5,6 +5,7 @@ import logging
 from datetime import datetime
 from copilotkit.langchain import copilotkit_emit_state
 from langchain_core.runnables import RunnableConfig
+import uuid
 
 steps = [
     {
@@ -51,7 +52,6 @@ class GetStepsInput(BaseModel):
 @tool(
     "getSteps",
     args_schema=GetStepsInput,
-    return_direct=True,
     description="Return a list of onboarding steps. Can optionally limit by count. If no count is provided, all steps will be returned."
 )
 async def getSteps(count: Optional[int] = None, state: Optional[Dict] = None) -> List[Dict[str, Any]]:
@@ -83,7 +83,7 @@ async def getSteps(count: Optional[int] = None, state: Optional[Dict] = None) ->
 
         await copilotkit_emit_state(config, state)
 
-        return state, result
+        return result
     except Exception as e:
         logging.error(f"Error in getSteps: {str(e)}")
         raise
@@ -95,7 +95,6 @@ class GetStepByIdInput(BaseModel):
 @tool(
     "getStepById",
     args_schema=GetStepByIdInput,
-    return_direct=True,
     description="Return a specific step by its ID."
 )
 async def getStepById(stepId: str, state: Optional[Dict] = None) -> Dict[str, Any]:
@@ -129,7 +128,7 @@ async def getStepById(stepId: str, state: Optional[Dict] = None) -> Dict[str, An
 
         await copilotkit_emit_state(config, state)
 
-        return state, result
+        return result
     except Exception as e:
         logging.error(f"Error in getStepById: {str(e)}")
         raise

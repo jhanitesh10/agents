@@ -5,6 +5,7 @@ import logging
 from datetime import datetime
 from copilotkit.langchain import copilotkit_emit_state
 from langchain_core.runnables import RunnableConfig
+import uuid
 
 
 questions = [
@@ -42,7 +43,6 @@ class GetQuestionsInput(BaseModel):
 @tool(
     "getQuestions",
     args_schema=GetQuestionsInput,
-    return_direct=True,
     description="Return a list of onboarding questions. Can optionally limit by count. If no count is provided, all questions will be returned."
 )
 async def getQuestions(count: Optional[int] = None, state: Optional[Dict] = None) -> List[Dict[str, Any]]:
@@ -51,7 +51,7 @@ async def getQuestions(count: Optional[int] = None, state: Optional[Dict] = None
 
     Returns:
         List[Dict[str, Any]]: List of question details including id, name, description,
-                                is_answered, step_id, and preview configuration
+                             is_answered, step_id, and preview configuration
     """
     try:
         if state is None:
@@ -69,12 +69,18 @@ async def getQuestions(count: Optional[int] = None, state: Optional[Dict] = None
         else:
             result = questions
 
-        state.questions = result
-        state.timestamp = datetime.now().isoformat()
+        state["questions"] = result
+        state["timestamp"] = datetime.now().isoformat()
 
         await copilotkit_emit_state(config, state)
 
-        return state, result
+        return {
+            "type": "tool",
+            "content": f"Retrieved {len(result)} questions",
+            "name": "getQuestions",
+            "tool_call_id": str(uuid.uuid4()),
+            "result": result
+        }
     except Exception as e:
         logging.error(f"Error in getQuestions: {str(e)}")
         raise
@@ -86,24 +92,23 @@ class GetQuestionsByStepInput(BaseModel):
 @tool(
     "getQuestionsByStep",
     args_schema=GetQuestionsByStepInput,
-    return_direct=True,
     description="Return a list of questions for a specific step ID."
 )
 async def getQuestionsByStep(stepId: str, state: Optional[Dict] = None) -> List[Dict[str, Any]]:
     """
-    Returns questions for a specific step.
+    Returns a list of questions for a specific step.
 
     Args:
         stepId (str): The ID of the step to get questions for
 
     Returns:
-        List[Dict[str, Any]]: List of questions for the specified step
+        List[Dict[str, Any]]: List of question details for the specified step
     """
     try:
         if state is None:
             state = {}
 
-        logging.info(f"Getting questions for step: {stepId}")
+        logging.info(f"Getting questions for step ID: {stepId}")
 
         config = RunnableConfig()
         await copilotkit_emit_state(config, state)
@@ -111,16 +116,22 @@ async def getQuestionsByStep(stepId: str, state: Optional[Dict] = None) -> List[
         if not stepId:
             raise ValueError("Step ID cannot be empty")
 
-        result = [q for q in questions if q["step"]["id"] == stepId]
+        result = [q for q in questions if q["step_id"] == stepId]
         if not result:
-            logging.warning(f"No questions found for step: {stepId}")
+            logging.warning(f"No questions found for step ID: {stepId}")
 
-        state.questions = result
-        state.timestamp = datetime.now().isoformat()
+        state["questions"] = result
+        state["timestamp"] = datetime.now().isoformat()
 
         await copilotkit_emit_state(config, state)
 
-        return state, result
+        return {
+            "type": "tool",
+            "content": f"Retrieved {len(result)} questions for step {stepId}",
+            "name": "getQuestionsByStep",
+            "tool_call_id": str(uuid.uuid4()),
+            "result": result
+        }
     except Exception as e:
         logging.error(f"Error in getQuestionsByStep: {str(e)}")
         raise
@@ -132,7 +143,6 @@ class GetQuestionByIdInput(BaseModel):
 @tool(
     "getQuestionById",
     args_schema=GetQuestionByIdInput,
-    return_direct=True,
     description="Return a specific question by its ID."
 )
 async def getQuestionById(questionId: str, state: Optional[Dict] = None) -> Dict[str, Any]:
@@ -161,12 +171,18 @@ async def getQuestionById(questionId: str, state: Optional[Dict] = None) -> Dict
         if not result:
             logging.warning(f"No question found with ID: {questionId}")
 
-        state.question = result
-        state.timestamp = datetime.now().isoformat()
+        state["question"] = result
+        state["timestamp"] = datetime.now().isoformat()
 
         await copilotkit_emit_state(config, state)
 
-        return state, result
+        return {
+            "type": "tool",
+            "content": f"Retrieved question: {result.get('name', 'Not found')}",
+            "name": "getQuestionById",
+            "tool_call_id": str(uuid.uuid4()),
+            "result": result
+        }
     except Exception as e:
         logging.error(f"Error in getQuestionById: {str(e)}")
         raise
